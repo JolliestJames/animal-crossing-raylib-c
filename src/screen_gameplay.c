@@ -31,6 +31,11 @@
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
+static Color backgroundColor = {147, 211, 196, 255};
+static Texture grassSprite;
+static Texture playerSprite;
+static Rectangle playerOrigin;
+static Rectangle playerDestination;
 
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
@@ -42,6 +47,11 @@ void InitGameplayScreen(void)
     // TODO: Initialize GAMEPLAY screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+    SetExitKey(0);
+    grassSprite = LoadTexture("resources/sprout_lands/Tilesets/Grass.png");
+    playerSprite = LoadTexture("resources/sprout_lands/Characters/BasicCharakterSpritesheet.png");
+    playerOrigin = (Rectangle){ 0, 0, 48, 48 };
+    playerDestination = (Rectangle){ 200, 200, 100, 100 };
 }
 
 // Gameplay Screen Update logic
@@ -61,10 +71,13 @@ void UpdateGameplayScreen(void)
 void DrawGameplayScreen(void)
 {
     // TODO: Draw GAMEPLAY screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
-    Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "GAMEPLAY SCREEN", pos, font.baseSize*3.0f, 4, MAROON);
-    DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+    // DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
+    // Vector2 pos = { 20, 10 };
+    // DrawTextEx(font, "GAMEPLAY SCREEN", pos, font.baseSize*3.0f, 4, MAROON);
+    // DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+    ClearBackground(backgroundColor);
+    DrawTexture(grassSprite, 100, 50, WHITE);
+    DrawTexturePro(playerSprite, playerOrigin, playerDestination, (Vector2){ playerDestination.width, playerDestination.height }, 0.f, WHITE);
 }
 
 // Gameplay Screen Unload logic

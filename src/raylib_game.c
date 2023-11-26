@@ -23,7 +23,8 @@
 // Shared Variables Definition (global)
 // NOTE: Those variables are shared between modules through screens.h
 //----------------------------------------------------------------------------------
-GameScreen currentScreen = LOGO;
+GameScreen currentScreen = GAMEPLAY;
+// GameScreen currentScreen = LOGO;
 Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
@@ -33,10 +34,7 @@ Sound fxCoin = { 0 };
 //----------------------------------------------------------------------------------
 static const int screenWidth = 800;
 static const int screenHeight = 450;
-static bool running = true;
-static Color backgroundColor = {147, 211, 196, 255};
-static Texture grassSprite;
-static Texture playerSprite;
+// static bool running = true;
 
 static float transAlpha = 0.0f;
 static bool onTransition = false;
@@ -58,9 +56,6 @@ static void UpdateDrawFrame(void);          // Update and draw one frame
 int main(void)
 {
     InitWindow(screenWidth, screenHeight, "Animals!");
-    SetExitKey(0);
-    grassSprite = LoadTexture("resources/sprout_lands/Tilesets/Grass.png");
-    playerSprite = LoadTexture("resources/sprout_lands/Characters/BasicCharakterSpritesheet.png");
 
 //     InitAudioDevice();
 
@@ -72,8 +67,9 @@ int main(void)
 //     PlayMusicStream(music);
 
 //     // Setup and init first screen
-//     currentScreen = LOGO;
+    currentScreen = GAMEPLAY;
 //     InitLogoScreen();
+    InitGameplayScreen();
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -87,14 +83,14 @@ int main(void)
     }
 #endif
 
-//     switch (currentScreen)
-//     {
-//         case LOGO: UnloadLogoScreen(); break;
-//         case TITLE: UnloadTitleScreen(); break;
-//         case GAMEPLAY: UnloadGameplayScreen(); break;
-//         case ENDING: UnloadEndingScreen(); break;
-//         default: break;
-//     }
+    switch (currentScreen)
+    {
+        case LOGO: UnloadLogoScreen(); break;
+        case TITLE: UnloadTitleScreen(); break;
+        case GAMEPLAY: UnloadGameplayScreen(); break;
+        case ENDING: UnloadEndingScreen(); break;
+        default: break;
+    }
 
 //     // Unload global data loaded
 //     UnloadFont(font);
@@ -252,9 +248,6 @@ static void UpdateDrawFrame(void)
     BeginDrawing();
 
         // ClearBackground(RAYWHITE);
-        ClearBackground(backgroundColor);
-        DrawTexture(grassSprite, 100, 50, WHITE);
-        DrawTexture(playerSprite, 200, 200, WHITE);
 
         switch(currentScreen)
         {

@@ -61,19 +61,19 @@ int main(void)
     //---------------------------------------------------------
     InitWindow(screenWidth, screenHeight, "raylib game template");
 
-    InitAudioDevice();      // Initialize audio device
+//     InitAudioDevice();      // Initialize audio device
 
-    // Load global data (assets that must be available in all screens, i.e. font)
-    font = LoadFont("resources/mecha.png");
-    music = LoadMusicStream("resources/ambient.ogg");
-    fxCoin = LoadSound("resources/coin.wav");
+//     // Load global data (assets that must be available in all screens, i.e. font)
+//     font = LoadFont("resources/mecha.png");
+//     music = LoadMusicStream("resources/ambient.ogg");
+//     fxCoin = LoadSound("resources/coin.wav");
 
-    SetMusicVolume(music, 1.0f);
-    PlayMusicStream(music);
+//     SetMusicVolume(music, 1.0f);
+//     PlayMusicStream(music);
 
-    // Setup and init first screen
-    currentScreen = LOGO;
-    InitLogoScreen();
+//     // Setup and init first screen
+//     currentScreen = LOGO;
+//     InitLogoScreen();
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -82,30 +82,37 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+//     while (!WindowShouldClose())    // Detect window close button or ESC key
+//     {
+//         UpdateDrawFrame();
+//     }
+    while (!WindowShouldClose())
     {
-        UpdateDrawFrame();
+        BeginDrawing();
+        ClearBackground(WHITE);
+        DrawText("Hello world", 0, 0, 20, BLACK);
+        EndDrawing();
     }
 #endif
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
     // Unload current screen data before closing
-    switch (currentScreen)
-    {
-        case LOGO: UnloadLogoScreen(); break;
-        case TITLE: UnloadTitleScreen(); break;
-        case GAMEPLAY: UnloadGameplayScreen(); break;
-        case ENDING: UnloadEndingScreen(); break;
-        default: break;
-    }
+//     switch (currentScreen)
+//     {
+//         case LOGO: UnloadLogoScreen(); break;
+//         case TITLE: UnloadTitleScreen(); break;
+//         case GAMEPLAY: UnloadGameplayScreen(); break;
+//         case ENDING: UnloadEndingScreen(); break;
+//         default: break;
+//     }
 
-    // Unload global data loaded
-    UnloadFont(font);
-    UnloadMusicStream(music);
-    UnloadSound(fxCoin);
+//     // Unload global data loaded
+//     UnloadFont(font);
+//     UnloadMusicStream(music);
+//     UnloadSound(fxCoin);
 
-    CloseAudioDevice();     // Close audio context
+//     CloseAudioDevice();     // Close audio context
 
     CloseWindow();          // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

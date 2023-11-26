@@ -3,7 +3,7 @@
 *   animal crossing clone with raylib
 *
 *   animals!
-*   do they even be crossing?
+*   an animal crossing clone with the raylib games programming library
 *
 *   This game has been created using raylib (www.raylib.com)
 *   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
@@ -35,6 +35,8 @@ static const int screenWidth = 800;
 static const int screenHeight = 450;
 static bool running = true;
 static Color backgroundColor = {147, 211, 196, 255};
+static Texture grassSprite;
+static Texture playerSprite;
 
 static float transAlpha = 0.0f;
 static bool onTransition = false;
@@ -57,6 +59,8 @@ int main(void)
 {
     InitWindow(screenWidth, screenHeight, "Animals!");
     SetExitKey(0);
+    grassSprite = LoadTexture("resources/sprout_lands/Tilesets/Grass.png");
+    playerSprite = LoadTexture("resources/sprout_lands/Characters/BasicCharakterSpritesheet.png");
 
 //     InitAudioDevice();
 
@@ -249,6 +253,8 @@ static void UpdateDrawFrame(void)
 
         // ClearBackground(RAYWHITE);
         ClearBackground(backgroundColor);
+        DrawTexture(grassSprite, 100, 50, WHITE);
+        DrawTexture(playerSprite, 200, 200, WHITE);
 
         switch(currentScreen)
         {

@@ -199,51 +199,51 @@ static void UpdateDrawFrame(void)
 {
     UpdateMusicStream(music);
 
-    // if (!onTransition)
-    // {
-    //     switch(currentScreen)
-    //     {
-    //         case LOGO:
-    //         {
-    //             UpdateLogoScreen();
+    if (!onTransition)
+    {
+        switch(currentScreen)
+        {
+            case LOGO:
+            {
+                UpdateLogoScreen();
 
-    //             if (FinishLogoScreen()) TransitionToScreen(TITLE);
+                if (FinishLogoScreen()) TransitionToScreen(TITLE);
 
-    //         } break;
-    //         case TITLE:
-    //         {
-    //             UpdateTitleScreen();
+            } break;
+            case TITLE:
+            {
+                UpdateTitleScreen();
 
-    //             if (FinishTitleScreen() == 1) TransitionToScreen(OPTIONS);
-    //             else if (FinishTitleScreen() == 2) TransitionToScreen(GAMEPLAY);
+                if (FinishTitleScreen() == 1) TransitionToScreen(OPTIONS);
+                else if (FinishTitleScreen() == 2) TransitionToScreen(GAMEPLAY);
 
-    //         } break;
-    //         case OPTIONS:
-    //         {
-    //             UpdateOptionsScreen();
+            } break;
+            case OPTIONS:
+            {
+                UpdateOptionsScreen();
 
-    //             if (FinishOptionsScreen()) TransitionToScreen(TITLE);
+                if (FinishOptionsScreen()) TransitionToScreen(TITLE);
 
-    //         } break;
-    //         case GAMEPLAY:
-    //         {
-    //             UpdateGameplayScreen();
+            } break;
+            case GAMEPLAY:
+            {
+                UpdateGameplayScreen();
 
-    //             if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
-    //             //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
+                if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
+                //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
-    //         } break;
-    //         case ENDING:
-    //         {
-    //             UpdateEndingScreen();
+            } break;
+            case ENDING:
+            {
+                UpdateEndingScreen();
 
-    //             if (FinishEndingScreen() == 1) TransitionToScreen(TITLE);
+                if (FinishEndingScreen() == 1) TransitionToScreen(TITLE);
 
-    //         } break;
-    //         default: break;
-    //     }
-    // }
-    // else UpdateTransition();    // Update transition (fade-in, fade-out)
+            } break;
+            default: break;
+        }
+    }
+    else UpdateTransition();
 
     BeginDrawing();
 

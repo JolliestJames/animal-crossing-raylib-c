@@ -36,6 +36,7 @@ static Texture grassSprite;
 static Texture playerSprite;
 static Rectangle playerOrigin;
 static Rectangle playerDestination;
+static float playerSpeed;
 
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
@@ -52,6 +53,7 @@ void InitGameplayScreen(void)
     playerSprite = LoadTexture("resources/sprout_lands/Characters/BasicCharakterSpritesheet.png");
     playerOrigin = (Rectangle){ 0, 0, 48, 48 };
     playerDestination = (Rectangle){ 200, 200, 100, 100 };
+    playerSpeed = 3.f;
 }
 
 // Gameplay Screen Update logic
@@ -60,10 +62,23 @@ void UpdateGameplayScreen(void)
     // TODO: Update GAMEPLAY screen variables here!
 
     // Press enter or tap to change to ENDING screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    {
-        finishScreen = 1;
-        PlaySound(fxCoin);
+    // if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+    // {
+    //     finishScreen = 1;
+    //     PlaySound(fxCoin);
+    // }
+
+    if (IsKeyDown(KEY_W)) {
+        playerDestination.y -= playerSpeed;
+    }
+    if (IsKeyDown(KEY_S)) {
+        playerDestination.y += playerSpeed;
+    }
+    if (IsKeyDown(KEY_A)) {
+        playerDestination.x -= playerSpeed;
+    }
+    if (IsKeyDown(KEY_D)) {
+        playerDestination.x += playerSpeed;
     }
 }
 

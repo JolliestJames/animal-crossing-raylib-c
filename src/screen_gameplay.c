@@ -40,6 +40,11 @@ static Texture playerSprite;
 static Rectangle playerOrigin;
 static Rectangle playerDestination;
 static float playerSpeed;
+static bool playerMoving;
+static int playerDir;
+static bool playerUp, playerDown, playerRight, playerLeft;
+static int playerFramesCounter = 0;
+
 static Camera2D camera;
 
 //----------------------------------------------------------------------------------
@@ -89,17 +94,54 @@ void UpdateGameplayScreen(void)
     // }
 
     if (IsKeyDown(KEY_W)) {
-        playerDestination.y -= playerSpeed;
+        playerMoving = true;
+        playerDir = 1;
+        playerUp = true;
     }
     if (IsKeyDown(KEY_S)) {
-        playerDestination.y += playerSpeed;
+        playerMoving = true;
+        playerDir = 0;
+        playerDown = true;
     }
     if (IsKeyDown(KEY_A)) {
-        playerDestination.x -= playerSpeed;
+        playerMoving = true;
+        playerDir = 2;
+        playerLeft = true;
     }
     if (IsKeyDown(KEY_D)) {
-        playerDestination.x += playerSpeed;
+        playerMoving = true;
+        playerDir = 3;
+        playerRight = true;
     }
+
+    playerOrigin.x = 0;
+
+    if (playerMoving) {
+        if (playerUp) {
+            playerDestination.y -= playerSpeed;
+        }
+        if (playerDown) {
+            playerDestination.y += playerSpeed;
+        }
+        if (playerLeft) {
+            playerDestination.x -= playerSpeed;
+        }
+        if (playerRight) {
+            playerDestination.x += playerSpeed;
+        }
+        if (framesCounter % 8 == 1) {
+            playerFramesCounter++;
+        }
+
+        playerOrigin.x = playerOrigin.width * (float)playerFramesCounter;
+    }
+
+    framesCounter++;
+    if (playerFramesCounter > 3) {
+        playerFramesCounter = 0;
+    }
+
+    playerOrigin.y = playerOrigin.height * (float)playerDir;
 
     camera = (Camera2D) {
         (Vector2) {
@@ -113,6 +155,12 @@ void UpdateGameplayScreen(void)
         0.f,
         1.f
     };
+
+    playerMoving = false;
+    playerUp = false;
+    playerDown = false;
+    playerRight = false;
+    playerLeft = false;
 }
 
 // Gameplay Screen Draw logic

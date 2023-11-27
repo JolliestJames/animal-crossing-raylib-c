@@ -41,7 +41,6 @@ static bool transFadeOut = false;
 static int transFromScreen = -1;
 static GameScreen transToScreen = UNKNOWN;
 
-// static bool running = true;
 static bool musicPaused;
 
 //----------------------------------------------------------------------------------

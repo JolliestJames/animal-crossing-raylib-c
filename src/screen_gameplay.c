@@ -77,7 +77,7 @@ void InitGameplayScreen(void)
             playerDestination.y - playerDestination.height/2
         },
         0.f,
-        1.f
+        2.f
     };
 }
 
@@ -153,7 +153,7 @@ void UpdateGameplayScreen(void)
             playerDestination.y - playerDestination.height/2
         },
         0.f,
-        1.f
+        2.f
     };
 
     playerMoving = false;

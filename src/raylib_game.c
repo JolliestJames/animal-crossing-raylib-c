@@ -68,7 +68,6 @@ int main(void)
     SetMusicVolume(music, 1.0f);
     PlayMusicStream(music);
 
-//     // Setup and init first screen
     currentScreen = GAMEPLAY;
 //     InitLogoScreen();
     InitGameplayScreen();
@@ -78,7 +77,6 @@ int main(void)
 #else
     SetTargetFPS(60);
 
-    // Main game loop
     while (!WindowShouldClose())
     {
         UpdateDrawFrame();
@@ -94,7 +92,6 @@ int main(void)
         default: break;
     }
 
-//     // Unload global data loaded
 //     UnloadFont(font);
     UnloadMusicStream(music);
 //     UnloadSound(fxCoin);

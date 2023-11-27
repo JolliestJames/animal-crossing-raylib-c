@@ -153,7 +153,7 @@ void UpdateGameplayScreen(void)
             playerDestination.y - playerDestination.height/2
         },
         0.f,
-        2.f
+        1.5f
     };
 
     playerMoving = false;

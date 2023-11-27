@@ -40,6 +40,7 @@ static Texture playerSprite;
 static Rectangle playerOrigin;
 static Rectangle playerDestination;
 static float playerSpeed;
+static Camera2D camera;
 
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
@@ -51,12 +52,28 @@ void InitGameplayScreen(void)
     // TODO: Initialize GAMEPLAY screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+
     SetExitKey(0);
+
     grassSprite = LoadTexture("resources/sprout_lands/Tilesets/Grass.png");
+
     playerSprite = LoadTexture("resources/sprout_lands/Characters/BasicCharakterSpritesheet.png");
     playerOrigin = (Rectangle){ 0, 0, 48, 48 };
     playerDestination = (Rectangle){ 200, 200, 100, 100 };
     playerSpeed = 3.f;
+
+    camera = (Camera2D) {
+        (Vector2) {
+            GetScreenWidth()/2,
+            GetScreenHeight()/2
+        },
+        (Vector2) {
+            playerDestination.x - playerDestination.width/2,
+            playerDestination.y - playerDestination.height/2
+        },
+        0.f,
+        1.f
+    };
 }
 
 // Gameplay Screen Update logic
@@ -83,6 +100,19 @@ void UpdateGameplayScreen(void)
     if (IsKeyDown(KEY_D)) {
         playerDestination.x += playerSpeed;
     }
+
+    camera = (Camera2D) {
+        (Vector2) {
+            GetScreenWidth()/2,
+            GetScreenHeight()/2
+        },
+        (Vector2) {
+            playerDestination.x - playerDestination.width/2,
+            playerDestination.y - playerDestination.height/2
+        },
+        0.f,
+        1.f
+    };
 }
 
 // Gameplay Screen Draw logic
@@ -94,8 +124,10 @@ void DrawGameplayScreen(void)
     // DrawTextEx(font, "GAMEPLAY SCREEN", pos, font.baseSize*3.0f, 4, MAROON);
     // DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
     ClearBackground(backgroundColor);
+    BeginMode2D(camera);
     DrawTexture(grassSprite, 100, 50, WHITE);
     DrawTexturePro(playerSprite, playerOrigin, playerDestination, (Vector2){ playerDestination.width, playerDestination.height }, 0.f, WHITE);
+    EndMode2D();
 }
 
 // Gameplay Screen Unload logic

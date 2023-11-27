@@ -34,13 +34,15 @@ Sound fxCoin = { 0 };
 //----------------------------------------------------------------------------------
 static const int screenWidth = 800;
 static const int screenHeight = 450;
-// static bool running = true;
 
 static float transAlpha = 0.0f;
 static bool onTransition = false;
 static bool transFadeOut = false;
 static int transFromScreen = -1;
 static GameScreen transToScreen = UNKNOWN;
+
+// static bool running = true;
+static bool musicPaused;
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -63,6 +65,7 @@ int main(void)
     music = LoadMusicStream("resources/ambient.ogg");
 //     fxCoin = LoadSound("resources/coin.wav");
 
+    musicPaused = false;
     SetMusicVolume(music, 1.0f);
     PlayMusicStream(music);
 
@@ -199,6 +202,12 @@ static void UpdateDrawFrame(void)
 {
     UpdateMusicStream(music);
 
+    if (musicPaused) {
+        PauseMusicStream(music);
+    } else {
+        ResumeMusicStream(music);
+    }
+
     if (!onTransition)
     {
         switch(currentScreen)
@@ -261,6 +270,10 @@ static void UpdateDrawFrame(void)
 
         // Draw full screen rectangle in front of everything
         if (onTransition) DrawTransition();
+
+        if (IsKeyPressed(KEY_Q)) {
+            musicPaused = !musicPaused;
+        }
 
         //DrawFPS(10, 10);
 

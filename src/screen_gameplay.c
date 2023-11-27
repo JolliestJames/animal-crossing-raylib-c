@@ -31,8 +31,11 @@
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
+
 static Color backgroundColor = {147, 211, 196, 255};
+
 static Texture grassSprite;
+
 static Texture playerSprite;
 static Rectangle playerOrigin;
 static Rectangle playerDestination;

@@ -24,12 +24,16 @@
 **********************************************************************************************/
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "raylib.h"
 #include "screens.h"
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
+
+static const char *mapName = "one.tilemap";
+
 static int framesCounter = 0;
 static int finishScreen = 0;
 
@@ -46,6 +50,7 @@ static int playerDir;
 static bool playerUp, playerDown, playerRight, playerLeft;
 static int playerFramesCounter = 0;
 
+static FILE *fp;
 static Rectangle tileDestination;
 static Rectangle tileSource;
 static int *tileMap;
@@ -92,14 +97,44 @@ void InitGameplayScreen(void)
         2.f
     };
 
-    mapWidth = 5;
-    mapHeight = 5;
-    tileMapSize = mapWidth * mapHeight;
-    tileMap = (int*)malloc(tileMapSize * sizeof(int));
+    mapWidth = -1;
+    mapHeight = -1;
 
-    for (int i = 0; i<(mapWidth*mapHeight); i++) {
-        tileMap[i] = 1;
+    fp = fopen(mapName, "r");
+    if (fp != NULL) {
+        int c;
+        tileMapSize = 0;
+        int fileSize = 0;
+
+        while ((c = fgetc(fp)) != EOF) {
+            fileSize++;
+
+            if ((char)c != '\n' && (char)c != ' ') {
+                tileMapSize++;
+            }
+        }
+
+        tileMap = malloc(sizeof(int) * (tileMapSize - 2));
+        if (fseek(fp, 0L, SEEK_SET) != 0) { /* Error */ }
+
+        int counter = 0;
+        for (int i = 0; i < fileSize; i++) {
+            if ((c = fgetc(fp)) != EOF) {
+                if ((char)c != '\n' && (char)c != ' ') {
+                    if (mapWidth == -1) {
+                        mapWidth = c - '0';
+                    } else if (mapHeight == -1) {
+                        mapHeight = c - '0';
+                    } else {
+                        tileMap[counter] = c - '0';
+                        counter++;
+                    }
+                }
+            }
+        }
     }
+
+    fclose(fp);
 }
 
 // Gameplay Screen Update logic
@@ -201,7 +236,6 @@ void DrawGameplayScreen(void)
 
     BeginMode2D(camera);
 
-    // DrawTexture(grassSprite, 100, 50, WHITE);
     for (int i = 0; i < tileMapSize; i++) {
         if (tileMap[i] != 0) {
             tileDestination.x = tileDestination.width * (float)(i % mapWidth);

@@ -23,6 +23,7 @@
 *
 **********************************************************************************************/
 
+#include <stdlib.h>
 #include "raylib.h"
 #include "screens.h"
 
@@ -37,13 +38,21 @@ static Color backgroundColor = {147, 211, 196, 255};
 static Texture grassSprite;
 
 static Texture playerSprite;
-static Rectangle playerOrigin;
+static Rectangle playerSource;
 static Rectangle playerDestination;
 static float playerSpeed;
 static bool playerMoving;
 static int playerDir;
 static bool playerUp, playerDown, playerRight, playerLeft;
 static int playerFramesCounter = 0;
+
+static Rectangle tileDestination;
+static Rectangle tileSource;
+static int *tileMap;
+static char **sourceMap;
+static int mapWidth;
+static int mapHeight;
+static int tileMapSize;
 
 static Camera2D camera;
 
@@ -62,8 +71,11 @@ void InitGameplayScreen(void)
 
     grassSprite = LoadTexture("resources/sprout_lands/Tilesets/Grass.png");
 
+    tileDestination = (Rectangle){ 0, 0, 16, 16 };
+    tileSource = (Rectangle){ 0, 0, 16, 16 };
+
     playerSprite = LoadTexture("resources/sprout_lands/Characters/BasicCharakterSpritesheet.png");
-    playerOrigin = (Rectangle){ 0, 0, 48, 48 };
+    playerSource = (Rectangle){ 0, 0, 48, 48 };
     playerDestination = (Rectangle){ 200, 200, 100, 100 };
     playerSpeed = 3.f;
 
@@ -79,6 +91,15 @@ void InitGameplayScreen(void)
         0.f,
         2.f
     };
+
+    mapWidth = 5;
+    mapHeight = 5;
+    tileMapSize = mapWidth * mapHeight;
+    tileMap = (int*)malloc(tileMapSize * sizeof(int));
+
+    for (int i = 0; i<(mapWidth*mapHeight); i++) {
+        tileMap[i] = 1;
+    }
 }
 
 // Gameplay Screen Update logic
@@ -114,7 +135,7 @@ void UpdateGameplayScreen(void)
         playerRight = true;
     }
 
-    playerOrigin.x = 0;
+    playerSource.x = playerSource.width * (float)playerFramesCounter;
 
     if (playerMoving) {
         if (playerUp) {
@@ -132,8 +153,8 @@ void UpdateGameplayScreen(void)
         if (framesCounter % 8 == 1) {
             playerFramesCounter++;
         }
-
-        playerOrigin.x = playerOrigin.width * (float)playerFramesCounter;
+    } else if (framesCounter % 45 == 1) {
+        playerFramesCounter++;
     }
 
     framesCounter++;
@@ -141,7 +162,12 @@ void UpdateGameplayScreen(void)
         playerFramesCounter = 0;
     }
 
-    playerOrigin.y = playerOrigin.height * (float)playerDir;
+    if (!playerMoving && playerFramesCounter > 1) {
+        playerFramesCounter = 0;
+    }
+
+    playerSource.x = playerSource.width * (float)playerFramesCounter;
+    playerSource.y = playerSource.height * (float)playerDir;
 
     camera = (Camera2D) {
         (Vector2) {
@@ -172,9 +198,23 @@ void DrawGameplayScreen(void)
     // DrawTextEx(font, "GAMEPLAY SCREEN", pos, font.baseSize*3.0f, 4, MAROON);
     // DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
     ClearBackground(backgroundColor);
+
     BeginMode2D(camera);
-    DrawTexture(grassSprite, 100, 50, WHITE);
-    DrawTexturePro(playerSprite, playerOrigin, playerDestination, (Vector2){ playerDestination.width, playerDestination.height }, 0.f, WHITE);
+
+    // DrawTexture(grassSprite, 100, 50, WHITE);
+    for (int i = 0; i < tileMapSize; i++) {
+        if (tileMap[i] != 0) {
+            tileDestination.x = tileDestination.width * (float)(i % mapWidth);
+            tileDestination.y = tileDestination.height * (float)(i / mapWidth);
+            tileSource.x = tileSource.width * (float)(tileMap[i]-1 % (int)(grassSprite.width/(int)tileSource.width));
+            tileSource.y = tileSource.height * (float)(tileMap[i]-1 / (int)(grassSprite.width/(int)tileSource.width));
+
+            DrawTexturePro(grassSprite, tileSource, tileDestination, (Vector2){ tileDestination.width, tileDestination.height }, 0.f, WHITE);
+        }
+    }
+
+    DrawTexturePro(playerSprite, playerSource, playerDestination, (Vector2){ playerDestination.width, playerDestination.height }, 0.f, WHITE);
+
     EndMode2D();
 }
 
@@ -182,6 +222,7 @@ void DrawGameplayScreen(void)
 void UnloadGameplayScreen(void)
 {
     // TODO: Unload GAMEPLAY screen variables here!
+    free(tileMap);
 }
 
 // Gameplay Screen should finish?
